@@ -1,13 +1,15 @@
-﻿namespace BowlingScore.Helpers
+﻿using BowlingScore.FileReaders.Interfaces;
+
+namespace BowlingScore.Helpers
 {
     public static class FileReaderSelector
     {
-        internal static IFileReader SelectFileReader(string extension)
+        public static IFileReader SelectFileReader(string extension, IFileWrapper fileWrapper)
         {
             switch (extension)
             {
                 case FileExtensions.TXT:
-                    return new TxtFileReader();
+                    return new TxtFileReader(fileWrapper);
 
                 default:
                     return null;

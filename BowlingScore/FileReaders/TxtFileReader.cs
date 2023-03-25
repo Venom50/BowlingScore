@@ -1,6 +1,6 @@
-﻿using BowlingScore.Generic;
+﻿using BowlingScore.FileReaders.Interfaces;
+using BowlingScore.Generic;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace BowlingScore
@@ -8,10 +8,12 @@ namespace BowlingScore
     public class TxtFileReader : IFileReader
     {
         private readonly List<KeyValuePair<string, List<string>>> _nameScoreKvp;
+        private readonly IFileWrapper _fileWrapper;
 
-        public TxtFileReader()
+        public TxtFileReader(IFileWrapper fileWrapper)
         {
             _nameScoreKvp = new List<KeyValuePair<string, List<string>>>();
+            _fileWrapper = fileWrapper;
         }
 
         public Result ReadFile(string filePath)
@@ -24,7 +26,7 @@ namespace BowlingScore
                 return result;
             }
 
-            var lines = File.ReadAllLines(filePath);
+            var lines = _fileWrapper.ReadAllLines(filePath);
 
             if (!IsValidFileStructure(lines.Length))
             {
@@ -38,7 +40,7 @@ namespace BowlingScore
 
                 if (!IsValidName(lines[i], i, ref message))
                 {
-                    if (!string.IsNullOrEmpty(message))
+                    if (!string.IsNullOrWhiteSpace(message))
                     {
                         result.AddError(message);
                         break;
@@ -76,7 +78,7 @@ namespace BowlingScore
                 _nameScoreKvp.Add(new KeyValuePair<string, List<string>>(name, scores));
             }
 
-            result.ResultObject = _nameScoreKvp;
+            result.ResultObject = _nameScoreKvp.Count > 0 ? _nameScoreKvp : null;
 
             return result;
         }
@@ -88,17 +90,17 @@ namespace BowlingScore
 
         private bool IsValidFile(string filePath)
         {
-            return File.Exists(filePath);
+            return _fileWrapper.Exists(filePath);
         }
 
         private bool IsValidName(string name, int index, ref string message)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 message = $"Name missing in line {index} in file.";
                 return false;
             }
-            if (name.Any(c => char.IsDigit(c)))
+            if (!name.Any(c => char.IsLetter(c)))
             {
                 message = $"Incorrect name in line {index} in file.";
                 return false;
@@ -125,7 +127,7 @@ namespace BowlingScore
 
         private bool IsValidScoresLength(int length)
         {
-            return length <= 21;
+            return length >= 20 && length <= 21;
         }
     }
 }

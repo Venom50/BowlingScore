@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileReaders\FileWrapper.cs" />
+    <Compile Include="FileReaders\Interfaces\IFileWrapper.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -53,7 +55,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="FileReaders\Interfaces\IFileReader.cs" />
-    <Compile Include="Generic\Result.cs" />
+    <Compile Include="Generics\Result.cs" />
     <Compile Include="Helpers\FileExtensions.cs" />
     <Compile Include="Helpers\FileReaderSelector.cs" />
     <Compile Include="Helpers\MessageBoxHelper.cs" />

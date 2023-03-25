@@ -1,4 +1,5 @@
-﻿using BowlingScore.Helpers;
+﻿using BowlingScore.FileReaders;
+using BowlingScore.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,8 +32,9 @@ namespace BowlingScore
                 {
                     var filePath = openFileDialog.FileName;
                     var extension = Path.GetExtension(filePath).ToLower();
+                    var fileWrapper = new FileWrapper();
 
-                    IFileReader fileReader = FileReaderSelector.SelectFileReader(extension);
+                    IFileReader fileReader = FileReaderSelector.SelectFileReader(extension, fileWrapper);
 
                     if (fileReader is null)
                     {
