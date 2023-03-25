@@ -34,18 +34,16 @@ namespace BowlingScore
 
                     IFileReader fileReader = FileReaderSelector.SelectFileReader(extension);
 
+                    if (fileReader is null)
+                    {
+                        MessageBoxHelper.ErrorMessageBox("No matching file readers for this file's extension.");
+                    }
+
                     var readFileResult = fileReader.ReadFile(filePath);
 
                     if (!readFileResult.IsSuccess)
                     {
-                        if (readFileResult.Messages.Count > 1)
-                        {
-                            MessageBoxHelper.ErrorMessageBox(string.Join(Environment.NewLine, readFileResult.Messages));
-                        }
-                        else
-                        {
-                            MessageBoxHelper.ErrorMessageBox(readFileResult.Messages[0]);
-                        }
+                        MessageBoxHelper.ErrorMessageBox(readFileResult.Messages[0]);
                     }
                     else
                     {
