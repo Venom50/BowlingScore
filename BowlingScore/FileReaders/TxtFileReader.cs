@@ -51,7 +51,7 @@ namespace BowlingScore
 
                 if (!IsValidScoresLength(scoreStrings.Length))
                 {
-                    result.AddError($"Incorrect amount of throws in line {i} in file.");
+                    result.AddError($"Incorrect amount of throws in line {i + 1} in file.");
                     break;
                 }
 
@@ -59,7 +59,7 @@ namespace BowlingScore
 
                 foreach (var scoreString in scoreStrings)
                 {
-                    if (!IsValidScore(scoreString, i, ref message))
+                    if (!IsValidScore(scoreString, i + 1, ref message))
                     {
                         result.AddError(message);
                         break;

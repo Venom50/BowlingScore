@@ -57,6 +57,7 @@
     <Compile Include="Helpers\FileExtensions.cs" />
     <Compile Include="Helpers\FileReaderSelector.cs" />
     <Compile Include="Helpers\MessageBoxHelper.cs" />
+    <Compile Include="Helpers\OpenFileDialogFilters.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileReaders\TxtFileReader.cs" />
