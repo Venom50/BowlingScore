@@ -47,6 +47,13 @@ namespace BowlingScore
                     {
                         MessageBoxHelper.ErrorMessageBox(readFileResult.Messages[0]);
                     }
+
+                    var bowlingData = fileReader.GetBowlingData((string[]) readFileResult.ResultObject);
+
+                    if (!bowlingData.IsSuccess)
+                    {
+                        MessageBoxHelper.ErrorMessageBox(bowlingData.Messages[0]);
+                    }
                     else
                     {
                         MessageBoxHelper.InfoMessageBox("File processed correctly.");

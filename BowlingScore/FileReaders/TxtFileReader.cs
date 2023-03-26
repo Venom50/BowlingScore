@@ -7,12 +7,15 @@ namespace BowlingScore
 {
     public class TxtFileReader : IFileReader
     {
-        private readonly List<KeyValuePair<string, List<string>>> _nameScoreKvp;
+        private const int LAST_THROW = 20;
+        private const int PENULTIMATE_THROW = 19;
+
+        private readonly List<KeyValuePair<string, List<int>>> _nameScoreKvp;
         private readonly IFileWrapper _fileWrapper;
 
         public TxtFileReader(IFileWrapper fileWrapper)
         {
-            _nameScoreKvp = new List<KeyValuePair<string, List<string>>>();
+            _nameScoreKvp = new List<KeyValuePair<string, List<int>>>();
             _fileWrapper = fileWrapper;
         }
 
@@ -33,6 +36,14 @@ namespace BowlingScore
                 result.AddError("Incorrect file structure.");
                 return result;
             }
+
+            result.ResultObject = lines;
+            return result;
+        }
+
+        public Result GetBowlingData(string[] lines)
+        {
+            var result = new Result();
 
             for (int i = 0; i < lines.Length; i += 2)
             {
@@ -57,17 +68,34 @@ namespace BowlingScore
                     break;
                 }
 
-                var scores = new List<string>();
+                var scores = new List<int>();
 
-                foreach (var scoreString in scoreStrings)
+                for (int j = 0; j < scoreStrings.Length; j++)
                 {
-                    if (!IsValidScore(scoreString, i + 1, ref message))
+                    if (!IsValidScore(scoreStrings[j], i + 1, ref message))
                     {
                         result.AddError(message);
                         break;
                     }
 
-                    scores.Add(scoreString);
+                    var score = int.Parse(scoreStrings[j]);
+
+                    if (j % 2 == 1)
+                    {
+                        if (!IsValidScoreAfterStrike(score, scores[j - 1], j))
+                        {
+                            result.AddError($"Incorrect value of score after strike in line {i + 1}, value number {j + 1} in file.");
+                            break;
+                        }
+
+                        if (!IsValidScoreInFrame(scores[j - 1], score, j))
+                        {
+                            result.AddError($"Incorrect value of frame in line {i + 1}, value number {j} and {j + 1} in file.");
+                            break;
+                        }
+                    }
+
+                    scores.Add(score);
                 }
 
                 if (!result.IsSuccess)
@@ -75,7 +103,7 @@ namespace BowlingScore
                     break;
                 }
 
-                _nameScoreKvp.Add(new KeyValuePair<string, List<string>>(name, scores));
+                _nameScoreKvp.Add(new KeyValuePair<string, List<int>>(name, scores));
             }
 
             result.ResultObject = _nameScoreKvp.Count > 0 ? _nameScoreKvp : null;
@@ -119,6 +147,29 @@ namespace BowlingScore
             if (score < 0 || score > 10)
             {
                 message = $"Score out of range in line {index} in file.";
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsValidScoreAfterStrike(int score, int strikeScore, int index)
+        {
+            if (strikeScore == 10 && (index != PENULTIMATE_THROW && index != LAST_THROW))
+            {
+                if (score != 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsValidScoreInFrame(int score1, int score2, int index)
+        {
+            if (score1 + score2 > 10 && (index != PENULTIMATE_THROW && index != LAST_THROW))
+            {
                 return false;
             }
 
