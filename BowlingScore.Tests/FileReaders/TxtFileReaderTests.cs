@@ -235,6 +235,63 @@ namespace BowlingScore.Tests.FileReaders
             });
         }
 
+        [TestCase("6,4,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,10,10")]
+        [TestCase("6,4,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,10,0")]
+        [TestCase("6,4,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,10,1")]
+        public void GetBowlingData_InvalidScoreLastThrowForStrike_ReturnsError(string score)
+        {
+            // Arrange
+            var data = new[] { "name", score };
+
+            // Act
+            var result = _txtFileReader.GetBowlingData(data);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.IsFalse(result.IsSuccess);
+                Assert.AreEqual("There was a strike in first throw of last frame of the game in line 1 in file. Value from additional throw is required.", result.Messages[0]);
+                Assert.IsNull(result.ResultObject);
+            });
+        }
+
+        [Test]
+        public void GetBowlingData_InvalidScoreLastThrowForSpare_ReturnsError()
+        {
+            // Arrange
+            var data = new[] { "name", "6,4,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,6,4" };
+
+            // Act
+            var result = _txtFileReader.GetBowlingData(data);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.IsFalse(result.IsSuccess);
+                Assert.AreEqual("There was a spare in last frame of the game in line 1 in file. Value from additional throw is required.", result.Messages[0]);
+                Assert.IsNull(result.ResultObject);
+            });
+        }
+
+        [TestCase("6,4,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,6,3,10")]
+        [TestCase("6,4,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,0,10,10")]
+        public void GetBowlingData_InvalidScoreLastFrameTooManyThrows_ReturnsError(string score)
+        {
+            // Arrange
+            var data = new[] { "name", score };
+
+            // Act
+            var result = _txtFileReader.GetBowlingData(data);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.IsFalse(result.IsSuccess);
+                Assert.AreEqual("There was no strike or spare in last frame of the game in line 1 in file. Value from additional throw should not be provided.", result.Messages[0]);
+                Assert.IsNull(result.ResultObject);
+            });
+        }
+
         [Test]
         public void GetBowlingData_ValidData_ReturnsSuccess()
         {

@@ -45,11 +45,11 @@ namespace BowlingScore
         {
             var result = new Result();
 
-            for (int i = 0; i < lines.Length; i += 2)
+            for (int lineIndex = 0; lineIndex < lines.Length; lineIndex += 2)
             {
                 var message = string.Empty;
 
-                if (!IsValidName(lines[i], i, ref message))
+                if (!IsValidName(lines[lineIndex], lineIndex, ref message))
                 {
                     if (!string.IsNullOrWhiteSpace(message))
                     {
@@ -58,40 +58,43 @@ namespace BowlingScore
                     }
                 }
 
-                var name = lines[i];
+                var name = lines[lineIndex];
 
-                string[] scoreStrings = lines[i + 1].Split(',');
+                string[] scoreStrings = lines[lineIndex + 1].Split(',');
 
                 if (!IsValidScoresLength(scoreStrings.Length))
                 {
-                    result.AddError($"Incorrect amount of throws in line {i + 1} in file.");
+                    result.AddError($"Incorrect amount of throws in line {lineIndex + 1} in file.");
                     break;
                 }
 
                 var scores = new List<int>();
 
-                for (int j = 0; j < scoreStrings.Length; j++)
+                for (int scoreIndex = 0; scoreIndex < scoreStrings.Length; scoreIndex++)
                 {
-                    if (!IsValidScore(scoreStrings[j], i + 1, ref message))
+                    if (!IsValidScore(scoreStrings[scoreIndex], lineIndex + 1, ref message))
                     {
                         result.AddError(message);
                         break;
                     }
 
-                    var score = int.Parse(scoreStrings[j]);
+                    var score = int.Parse(scoreStrings[scoreIndex]);
 
-                    if (j % 2 == 1)
+                    if (scoreIndex % 2 == 1)
                     {
-                        if (!IsValidScoreAfterStrike(score, scores[j - 1], j))
+                        if (!IsValidFrame(score, scores[scoreIndex - 1], lineIndex, scoreIndex, ref message))
                         {
-                            result.AddError($"Incorrect value of score after strike in line {i + 1}, value number {j + 1} in file.");
+                            result.AddError(message);
                             break;
                         }
 
-                        if (!IsValidScoreInFrame(scores[j - 1], score, j))
+                        if (scoreIndex == PENULTIMATE_THROW)
                         {
-                            result.AddError($"Incorrect value of frame in line {i + 1}, value number {j} and {j + 1} in file.");
-                            break;
+                            if (!IsValidLastFrame(score, scores[scoreIndex - 1], lineIndex, scoreStrings.Length, ref message))
+                            {
+                                result.AddError(message);
+                                break;
+                            }
                         }
                     }
 
@@ -148,6 +151,50 @@ namespace BowlingScore
             {
                 message = $"Score out of range in line {index} in file.";
                 return false;
+            }
+
+            return true;
+        }
+
+        private bool IsValidFrame(int score1, int score2, int lineIndex, int scoreIndex, ref string message)
+        {
+            if (!IsValidScoreAfterStrike(score1, score2, scoreIndex))
+            {
+                message = $"Incorrect value of score after strike in line {lineIndex + 1}, value number {scoreIndex + 1} in file.";
+                return false;
+            }
+
+            if (!IsValidScoreInFrame(score1, score2, scoreIndex))
+            {
+                message = $"Incorrect value of frame in line {lineIndex + 1}, value number {scoreIndex} and {scoreIndex + 1} in file.";
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsValidLastFrame(int score1, int score2, int lineIndex, int scoreStringsLength, ref string message)
+        {
+            if (scoreStringsLength != LAST_THROW + 1)
+            {
+                if (score1 + score2 == 10 && score2 != 10)
+                {
+                    message = $"There was a spare in last frame of the game in line {lineIndex + 1} in file. Value from additional throw is required.";
+                    return false;
+                }
+                if (score2 == 10)
+                {
+                    message = $"There was a strike in first throw of last frame of the game in line {lineIndex + 1} in file. Value from additional throw is required.";
+                    return false;
+                }
+            }
+            else
+            {
+                if (score1 + score2 < 10 || score2 != 10)
+                {
+                    message = $"There was no strike or spare in last frame of the game in line {lineIndex + 1} in file. Value from additional throw should not be provided.";
+                    return false;
+                }
             }
 
             return true;
