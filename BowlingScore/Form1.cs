@@ -1,5 +1,7 @@
-﻿using BowlingScore.FileReaders;
+﻿using BowlingScore.Calculator;
+using BowlingScore.FileReaders;
 using BowlingScore.Helpers;
+using BowlingScore.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,6 +23,9 @@ namespace BowlingScore
 
         private void uploadFileButton_Click(object sender, EventArgs e)
         {
+            var bowlingScores = new List<BowlingScoreModel>();
+            var bowlingScoreCalculator = new BowlingScoreCalculator();
+
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
@@ -58,6 +63,19 @@ namespace BowlingScore
                     {
                         MessageBoxHelper.InfoMessageBox("File processed correctly.");
                         _nameScoreKvp = (List<KeyValuePair<string, List<int>>>) bowlingData.ResultObject;
+                    }
+
+                    if (_nameScoreKvp != null)
+                    {
+                        foreach (var item in _nameScoreKvp)
+                        {
+                            bowlingScores.Add(new BowlingScoreModel
+                            {
+                                Name = item.Key,
+                                ThrowsScores = item.Value,
+                                TotalScore = bowlingScoreCalculator.CalculateScore(item.Value)
+                            });
+                        }
                     }
                 }
             }
