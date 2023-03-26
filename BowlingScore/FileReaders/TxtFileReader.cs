@@ -190,7 +190,7 @@ namespace BowlingScore
             }
             else
             {
-                if (score1 + score2 < 10 || score2 != 10)
+                if (score1 + score2 < 10 || (score1 + score2 == 10 && score1 == 10))
                 {
                     message = $"There was no strike or spare in last frame of the game in line {lineIndex + 1} in file. Value from additional throw should not be provided.";
                     return false;

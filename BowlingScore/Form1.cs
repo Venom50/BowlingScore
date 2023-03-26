@@ -12,7 +12,7 @@ namespace BowlingScore
 {
     public partial class Form1 : Form
     {
-        private List<KeyValuePair<string, List<string>>> _nameScoreKvp;
+        private List<KeyValuePair<string, List<int>>> _nameScoreKvp;
 
         public Form1()
         {
@@ -57,7 +57,7 @@ namespace BowlingScore
                     else
                     {
                         MessageBoxHelper.InfoMessageBox("File processed correctly.");
-                        _nameScoreKvp = (List<KeyValuePair<string, List<string>>>) readFileResult.ResultObject;
+                        _nameScoreKvp = (List<KeyValuePair<string, List<int>>>) bowlingData.ResultObject;
                     }
                 }
             }
