@@ -1,0 +1,10 @@
+# Visual Studio files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vs/
+
+# Build results
+bin/
+obj/

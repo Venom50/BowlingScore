@@ -29,13 +29,34 @@ namespace BowlingScore
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.uploadFileButton = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // uploadFileButton
+            // 
+            this.uploadFileButton.Location = new System.Drawing.Point(545, 249);
+            this.uploadFileButton.Name = "uploadFileButton";
+            this.uploadFileButton.Size = new System.Drawing.Size(177, 73);
+            this.uploadFileButton.TabIndex = 0;
+            this.uploadFileButton.Text = "Upload file";
+            this.uploadFileButton.UseVisualStyleBackColor = true;
+            this.uploadFileButton.Click += new System.EventHandler(this.uploadFileButton_Click);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.uploadFileButton);
+            this.Name = "Form1";
             this.Text = "Form1";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Button uploadFileButton;
     }
 }
 
