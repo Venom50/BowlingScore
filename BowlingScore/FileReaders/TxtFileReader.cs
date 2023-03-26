@@ -51,11 +51,8 @@ namespace BowlingScore
 
                 if (!IsValidName(lines[lineIndex], lineIndex, ref message))
                 {
-                    if (!string.IsNullOrWhiteSpace(message))
-                    {
-                        result.AddError(message);
-                        break;
-                    }
+                    result.AddError(message);
+                    break;
                 }
 
                 var name = lines[lineIndex];
@@ -64,7 +61,7 @@ namespace BowlingScore
 
                 if (!IsValidScoresLength(scoreStrings.Length))
                 {
-                    result.AddError($"Incorrect amount of throws in line {lineIndex + 1} in file.");
+                    result.AddError($"Incorrect amount of throws in line {lineIndex + 2} in file.");
                     break;
                 }
 
@@ -128,12 +125,12 @@ namespace BowlingScore
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                message = $"Name missing in line {index} in file.";
+                message = $"Name missing in line {index + 1} in file.";
                 return false;
             }
             if (!name.Any(c => char.IsLetter(c)))
             {
-                message = $"Incorrect name in line {index} in file.";
+                message = $"Incorrect name in line {index + 1} in file.";
                 return false;
             }
 
@@ -144,12 +141,12 @@ namespace BowlingScore
         {
             if (!int.TryParse(scoreString, out int score))
             {
-                message = $"Incorrect score format in line {index} in file.";
+                message = $"Incorrect score format in line {index + 1} in file.";
                 return false;
             }
             if (score < 0 || score > 10)
             {
-                message = $"Score out of range in line {index} in file.";
+                message = $"Score out of range in line {index + 1} in file.";
                 return false;
             }
 
@@ -160,13 +157,13 @@ namespace BowlingScore
         {
             if (!IsValidScoreAfterStrike(score1, score2, scoreIndex))
             {
-                message = $"Incorrect value of score after strike in line {lineIndex + 1}, value number {scoreIndex + 1} in file.";
+                message = $"Incorrect value of score after strike in line {lineIndex + 2}, value number {scoreIndex + 1} in file.";
                 return false;
             }
 
             if (!IsValidScoreInFrame(score1, score2, scoreIndex))
             {
-                message = $"Incorrect value of frame in line {lineIndex + 1}, value number {scoreIndex} and {scoreIndex + 1} in file.";
+                message = $"Incorrect value of frame in line {lineIndex + 2}, value number {scoreIndex} and {scoreIndex + 1} in file.";
                 return false;
             }
 
@@ -179,12 +176,12 @@ namespace BowlingScore
             {
                 if (score1 + score2 == 10 && score2 != 10)
                 {
-                    message = $"There was a spare in last frame of the game in line {lineIndex + 1} in file. Value from additional throw is required.";
+                    message = $"There was a spare in last frame of the game in line {lineIndex + 2} in file. Value from additional throw is required.";
                     return false;
                 }
                 if (score2 == 10)
                 {
-                    message = $"There was a strike in first throw of last frame of the game in line {lineIndex + 1} in file. Value from additional throw is required.";
+                    message = $"There was a strike in first throw of last frame of the game in line {lineIndex + 2} in file. Value from additional throw is required.";
                     return false;
                 }
             }
@@ -192,7 +189,7 @@ namespace BowlingScore
             {
                 if (score1 + score2 < 10 || (score1 + score2 == 10 && score1 == 10))
                 {
-                    message = $"There was no strike or spare in last frame of the game in line {lineIndex + 1} in file. Value from additional throw should not be provided.";
+                    message = $"There was no strike or spare in last frame of the game in line {lineIndex + 2} in file. Value from additional throw should not be provided.";
                     return false;
                 }
             }

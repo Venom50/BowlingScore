@@ -92,7 +92,7 @@ namespace BowlingScore.Tests.FileReaders
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.IsSuccess);
-                Assert.AreEqual("Incorrect name in line 0 in file.", result.Messages[0]);
+                Assert.AreEqual("Incorrect name in line 1 in file.", result.Messages[0]);
                 Assert.IsNull(result.ResultObject);
             });
         }
@@ -111,7 +111,7 @@ namespace BowlingScore.Tests.FileReaders
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.IsSuccess);
-                Assert.AreEqual("Name missing in line 0 in file.", result.Messages[0]);
+                Assert.AreEqual("Name missing in line 1 in file.", result.Messages[0]);
                 Assert.IsNull(result.ResultObject);
             });
         }
@@ -130,7 +130,7 @@ namespace BowlingScore.Tests.FileReaders
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.IsSuccess);
-                Assert.AreEqual("Incorrect amount of throws in line 1 in file.", result.Messages[0]);
+                Assert.AreEqual("Incorrect amount of throws in line 2 in file.", result.Messages[0]);
                 Assert.IsNull(result.ResultObject);
             });
         }
@@ -150,7 +150,7 @@ namespace BowlingScore.Tests.FileReaders
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.IsSuccess);
-                Assert.AreEqual("Incorrect score format in line 1 in file.", result.Messages[0]);
+                Assert.AreEqual("Incorrect score format in line 2 in file.", result.Messages[0]);
                 Assert.IsNull(result.ResultObject);
             });
         }
@@ -169,7 +169,7 @@ namespace BowlingScore.Tests.FileReaders
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.IsSuccess);
-                Assert.AreEqual("Score out of range in line 1 in file.", result.Messages[0]);
+                Assert.AreEqual("Score out of range in line 2 in file.", result.Messages[0]);
                 Assert.IsNull(result.ResultObject);
             });
         }
@@ -230,7 +230,7 @@ namespace BowlingScore.Tests.FileReaders
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.IsSuccess);
-                Assert.AreEqual("Incorrect value of frame in line 1, value number 1 and 2 in file.", result.Messages[0]);
+                Assert.AreEqual("Incorrect value of frame in line 2, value number 1 and 2 in file.", result.Messages[0]);
                 Assert.IsNull(result.ResultObject);
             });
         }
@@ -250,7 +250,7 @@ namespace BowlingScore.Tests.FileReaders
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.IsSuccess);
-                Assert.AreEqual("There was a strike in first throw of last frame of the game in line 1 in file. Value from additional throw is required.", result.Messages[0]);
+                Assert.AreEqual("There was a strike in first throw of last frame of the game in line 2 in file. Value from additional throw is required.", result.Messages[0]);
                 Assert.IsNull(result.ResultObject);
             });
         }
@@ -268,7 +268,7 @@ namespace BowlingScore.Tests.FileReaders
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.IsSuccess);
-                Assert.AreEqual("There was a spare in last frame of the game in line 1 in file. Value from additional throw is required.", result.Messages[0]);
+                Assert.AreEqual("There was a spare in last frame of the game in line 2 in file. Value from additional throw is required.", result.Messages[0]);
                 Assert.IsNull(result.ResultObject);
             });
         }
@@ -287,7 +287,7 @@ namespace BowlingScore.Tests.FileReaders
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.IsSuccess);
-                Assert.AreEqual("There was no strike or spare in last frame of the game in line 1 in file. Value from additional throw should not be provided.", result.Messages[0]);
+                Assert.AreEqual("There was no strike or spare in last frame of the game in line 2 in file. Value from additional throw should not be provided.", result.Messages[0]);
                 Assert.IsNull(result.ResultObject);
             });
         }
