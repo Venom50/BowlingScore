@@ -31,6 +31,12 @@ namespace BowlingScore
 
             var lines = _fileWrapper.ReadAllLines(filePath);
 
+            if (!IsFileNotEmpty(lines))
+            {
+                result.AddError("File is empty.");
+                return result;
+            }
+
             if (!IsValidFileStructure(lines.Length))
             {
                 result.AddError("Incorrect file structure.");
@@ -119,6 +125,11 @@ namespace BowlingScore
         private bool IsValidFile(string filePath)
         {
             return _fileWrapper.Exists(filePath);
+        }
+
+        private bool IsFileNotEmpty(string[] lines)
+        {
+           return lines.Length > 0;
         }
 
         private bool IsValidName(string name, int index, ref string message)
