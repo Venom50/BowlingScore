@@ -39,6 +39,25 @@ namespace BowlingScore.Tests.FileReaders
         }
 
         [Test]
+        public void ReadFile_FileIsEmpty_ReturnsError()
+        {
+            // Arrange
+            _fileWrapper.Exists(FILE_PATH).Returns(true);
+            _fileWrapper.ReadAllLines(FILE_PATH).Returns(new string[] { });
+
+            // Act
+            var result = _txtFileReader.ReadFile(FILE_PATH);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.IsFalse(result.IsSuccess);
+                Assert.AreEqual("File is empty.", result.Messages[0]);
+                Assert.IsNull(result.ResultObject);
+            });
+        }
+
+        [Test]
         public void ReadFile_IncorrectFileStructure_ReturnsError()
         {
             // Arrange
